@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Validació de formularis</title>
+
+  <style>
+    body {
+      padding: 20px;
+    }
+
+    .correcte {
+      color: green;
+      font-weight: bold;
+    }
+
+    .incorrecte {
+      color: red;
+      font-weight: bold;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+  <h2>Validació de formularis</h2>
+
+  <form id="loginForm" action="pelis.html">
+
+    <label>Nom:</label><br>
+    <input type="text" id="username" required>
+    <br><br>
+
+    <label>Contrasenya:</label><br>
+    <input type="password" id="password" required>
+    <br><br>
+
+    <input type="checkbox" id="showPass">
+    <label for="showPass">Mostrar contrasenya</label>
+    <br><br>
+
+    <button type="submit">Enviar</button>
+
+  </form>
+
+  <div id="divusuari" class="incorrecte"> 
+      El nom d'usuari ha de contenir:
+      <ul>
+        <li id="@">una @</li>
+      </ul>
+  </div>
+
+  <div id="divcontrasenya" class="incorrecte">
+    La contrasenya ha de tenir:
+    <ul>
+      <li id="minúscula">una minúscula</li>
+      <li id="majúscula">una majúscula</li>
+      <li id="número">un número</li>
+      <li id="caràcters">mínim 8 caràcters</li>
+    </ul>
+  </div>
+
+  <script>
+    let usernameInput = document.getElementById("username");
+    let passwordInput = document.getElementById("password");
+    let showPassCheckbox = document.getElementById("showPass");
+
+    let divusuari = document.getElementById("divusuari");
+    let divcontrasenya = document.getElementById("divcontrasenya");
+
+    let minúscula = document.getElementById("minúscula");
+    let majúscula = document.getElementById("majúscula");
+    let número = document.getElementById("número");
+    let caràcters = document.getElementById("caràcters");
+
+  
+    showPassCheckbox.addEventListener("change", function () {
+
+      // Aquest if es per mostrar o amagar la contrasenya
+      if (showPassCheckbox.checked) {
+        passwordInput.type = "text";  //aqui si li donem mostra la contrasenya
+      } else {
+        passwordInput.type = "password";  //si no amaga la contrasenya y mostra els punts
+      }
+
+    });
+
+    //Per validar el nom per a que este el @
+    function validateUsername() {
+      let usernameValue = usernameInput.value;
+
+      if (usernameValue.includes("@")) {
+        divusuari.textContent = "Nom correcte";
+        divusuari.className = "correcte";
+        return true; //si el nom porta una @ el nom es correcte 
+      } else {
+        divusuari.textContent = "El nom d'usuari ha de contenir una @";
+        divusuari.className = "incorrecte";
+        return false; //si el nom no porta una @ el nom no es correcte 
+      }
+    }
+
+ 
+    //Per validar la contrasenya per a que esteguin la minúscula, la majúscula, en número i els 8 caràcters
+    function validatePassword() {
+      let passValue = passwordInput.value;
+
+      let hasLower = false;
+      let hasUpper = false;
+      let hasNumber = false;
+      let hasLength = false;
+
+      // Aquest if es per a que hi este la minúscula
+      if (/[a-z]/.test(passValue)) {
+        hasLower = true;
+        minúscula.className = "correcte";
+        minúscula.textContent = "una minúscula";
+      } else {
+        minúscula.className = "incorrecte";
+        minúscula.textContent = "una minúscula";
+      }
+
+      // Aquest if es per a que hi este la majúscula
+      if (/[A-Z]/.test(passValue)) {
+        hasUpper = true;
+        majúscula.className = "correcte";
+        majúscula.textContent = "una majúscula";
+      } else {
+        majúscula.className = "incorrecte";
+        majúscula.textContent = "una majúscula";
+      }
+
+      // Aquest if es per a que hi este el número
+      if (/[0-9]/.test(passValue)) {
+        hasNumber = true;
+        número.className = "correcte";
+        número.textContent = "un número";
+      } else {
+        número.className = "incorrecte";
+        número.textContent = "un número";
+      }
+
+      // Aquest if es per a que hi haguin mínim 8 caràcters
+      if (passValue.length >= 8) {
+        hasLength = true;
+        caràcters.className = "correcte";
+        caràcters.textContent = "mínim 8 caràcters";
+      } else {
+        caràcters.className = "incorrecte";
+        caràcters.textContent = "mínim 8 caràcters";
+      }
+
+      // Amb aquesta concició fem que si les cuatre condicions estan bé la contrasenya es correcte
+      if (hasLower && hasUpper && hasNumber && hasLength) {
+        divcontrasenya.className = "correcte";
+        return true;
+      } else {
+        divcontrasenya.className = "incorrecte";
+        return false;
+      }
+    }
+
+    //Ara amb aquesta funció comprobem que el nom i la contrassenya siguin correctes
+    function checkForm() {
+
+      let nomcorrecte = validateUsername();
+      let contrasenyacorrecte = validatePassword();
+
+      if (nomcorrecte && contrasenyacorrecte) {
+
+        divusuari.style.display = "none";
+        divcontrasenya.style.display = "none";
+
+      } else {
+
+        // Si algo falla, mostramos los divs otra vez
+        divusuari.style.display = "block";
+        divcontrasenya.style.display = "block";
+
+      }
+    }
+
+    usernameInput.addEventListener("keyup", checkForm);
+    passwordInput.addEventListener("keyup", checkForm);
+
+  </script>
+
+</body>
+</html>

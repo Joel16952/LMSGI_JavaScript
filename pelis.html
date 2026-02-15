@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Col·lecció de pel·lícules</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+
+    .searchBox {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 8px;
+      width: 250px;
+    }
+
+    button {
+      padding: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+
+    .card h3 {
+      margin: 0;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Col·lecció de pel·lícules</h2>
+
+  <div class="searchBox">
+    <input type="text" id="searchInput">
+    <button id="searchBtn">Buscar</button>
+  </div>
+
+  <div id="Col·lecciópel·lícules" class="grid"></div>
+
+  <script src="infopelis.js"></script>
+
+  <script>
+    const grid = document.getElementById("Col·lecciópel·lícules");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+
+    // Amb aquesta funció és mostra tota la llista de pelIlicules que hi ha en infopelis.js
+    function mostrarPel·licules(llista) {
+      grid.innerHTML = ""; 
+
+      llista.forEach(peli => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        card.innerHTML = `
+          <h3>${peli.title}</h3>
+          <p><b>Any:</b> ${peli.year}</p>
+          <p><b>Génere:</b> ${peli.genre}</p>
+          <p><b>Director:</b> ${peli.director}</p>
+          <p><b>Actors:</b> ${peli.actors}</p>
+          <p><b>Oscars:</b> ${peli.oscars}</p> `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    mostrarPel·licules(pelicules); // mostra les pel·lícules al inici
+
+    // Aquesta funció serveix per buscar les pel·lícules per titol, any, génere, director, actors o oscars
+    function buscar() {
+      const text = searchInput.value.toLowerCase();
+
+      if (text === "") {
+        mostrarPel·licules(pelicules); //si la opció de buscar està buida mostra totes 
+        return;
+      }
+
+      const filtrades = pelicules.filter(peli => {
+        return (
+          peli.title.toLowerCase().includes(text) || //per buscar per titol
+          peli.year.toString().includes(text) || //per buscar per any       
+          peli.genre.toLowerCase().includes(text) ||  //per buscar per génere
+          peli.director.toLowerCase().includes(text) ||  //per buscar per director
+          peli.actors.toLowerCase().includes(text) ||  //per buscar per actors
+          peli.oscars.toString().includes(text)  //per buscar per oscars
+        );
+      });
+
+      mostrarPel·licules(filtrades);
+    }
+
+    searchBtn.addEventListener("click", buscar); //per a que funcioni el botó de buscar
+
+  </script>
+
+</body>
+</html>
